@@ -1,5 +1,7 @@
 const api = require('koa-router')()
 
+const {getData, postData} = require('../controlers/request')
+
 module.exports = api.get('/get/data.json', async (ctx) => {
     ctx.body = {
         success:true,
@@ -14,4 +16,4 @@ module.exports = api.get('/get/data.json', async (ctx) => {
             text:'my name is koa'
         }
     }
-})
+}).get('/getData',getData).post('/postData',postData)
