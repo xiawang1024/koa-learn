@@ -5,6 +5,13 @@ const static = require('koa-static');
 const bodyParser = require('koa-bodyparser');
 const session = require('koa-session');
 
+//挂载数据库
+const { connect, initSchema } = require('./database/index');
+(async function() {
+	await connect();
+	initSchema();
+})();
+
 //使用ctx.body解析中间件
 app.use(bodyParser());
 

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>upload</title>
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="form">
+        <div class="form-group">
+            <label for="username">UserName</label>
+            <input type="email" class="form-control" id="username" aria-describedby="emailHelp" placeholder="yourName">
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Password">
+        </div>
+    </form>
+    <button type="submit" id="btn" class="btn btn-primary">提交</button>
+    <script src="https://cdn.bootcss.com/jquery/2.1.0/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script>
+        $(function () {
+            $('#btn').click(function () {
+
+                let username = $('#username').val()
+                let password = $('#password').val()
+
+                axios({
+                    url: '/api/sign',
+                    method: 'POST',
+                    data: {
+                        username,
+                        password
+                    },
+
+                }).then((res) => {
+                    console.log(res.data)
+                })
+            })
+        })
+    </script>
+</body>
+
+</html>

@@ -22,10 +22,12 @@
   "homepage": "https://github.com/xiawang1024/koa-learn#readme",
   "dependencies": {
     "busboy": "^0.2.14",
+    "glob": "^7.1.2",
     "koa": "^2.5.1",
     "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.4.0",
     "koa-session": "^5.8.1",
-    "koa-static": "^4.0.2"
+    "koa-static": "^4.0.2",
+    "mongoose": "^5.1.0"
   }
 }
