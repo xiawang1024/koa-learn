@@ -1,4 +1,4 @@
-const uploadFile = require('../util/upload');
+const { uploadFile } = require('../util/upload');
 const path = require('path');
 const process = require('process');
 module.exports = {

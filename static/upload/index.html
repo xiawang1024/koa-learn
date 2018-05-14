@@ -19,18 +19,16 @@
         $
         $(function () {
             $('#btn').click(function () {
+                let file = document.getElementById("file").files[0]
                 let formData = new FormData()
-                console.log($('#file').val())
-                let file = $('#file').val();
+                console.log(file)
                 formData.append('img', file)
-                console.log(formData)
-
                 axios({
                     url: '/api/upload',
                     method: 'POST',
                     data: formData,
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
+                        'Content-Type': 'multipart/form-data'
                     }
                 }).then((res) => {
                     console.log(res.data)
