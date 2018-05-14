@@ -51,8 +51,13 @@ function uploadFile(ctx, options) {
 		let result = {
 			success: false,
 			message: '',
-			data: null
+			data: {}
 		};
+		// 解析表单中其他字段信息
+		busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
+			console.log('表单字段数据 [' + fieldname + ']: value: ' + inspect(val));
+			result.data[fieldname] = inspect(val);
+		});
 
 		// 解析请求文件事件
 		busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
@@ -67,9 +72,8 @@ function uploadFile(ctx, options) {
 			file.on('end', function() {
 				result.success = true;
 				result.message = '文件上传成功';
-				result.data = {
-					pictureUrl: `//${ctx.host}/image/${fileType}/${fileName}`
-				};
+				result.data['fileSrc'] = `//${ctx.host}/image/${fileType}/${fileName}`;
+
 				console.log('文件上传成功！');
 				resolve(result);
 			});
