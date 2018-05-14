@@ -14,8 +14,5 @@ module.exports = router
 	.get('/session', async (ctx) => {
 		let n = ctx.session.views || 0;
 		ctx.session.views = ++n;
-		ctx.cookies.set({
-			path: '/session'
-		});
 		ctx.body = `${n} views`;
 	});

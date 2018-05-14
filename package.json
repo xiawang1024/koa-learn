@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/xiawang1024/koa-learn#readme",
   "dependencies": {
+    "busboy": "^0.2.14",
     "koa": "^2.5.1",
     "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.4.0",

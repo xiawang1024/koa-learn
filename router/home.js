@@ -12,6 +12,7 @@ module.exports = router.get('/', async (ctx) => {
             <li><a href="/api/getData?name=wangxia&age=28">/api/getData</a></li>
             <li><a href="/cookie/setcookie">/cookie</a></li>
             <li><a href="/cookie/session">/session</a></li>
+            <li><a href="/upload/index.html">/upload</a></li>
         </ul>
     `;
 	ctx.body = html;

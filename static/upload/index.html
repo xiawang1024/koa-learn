@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <form id="form">
+        <input type="file" name="pic" id="file">
+    </form>
+    <button id="btn">上传</button>
+    <script src="https://cdn.bootcss.com/jquery/2.1.0/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+    <script>
+        $
+        $(function () {
+            $('#btn').click(function () {
+                let formData = new FormData()
+                console.log($('#file').val())
+                let file = $('#file').val();
+                formData.append('img', file)
+                console.log(formData)
+
+                axios({
+                    url: '/api/upload',
+                    method: 'POST',
+                    data: formData,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                }).then((res) => {
+                    console.log(res.data)
+                })
+            })
+        })
+    </script>
+</body>
+
+</html>

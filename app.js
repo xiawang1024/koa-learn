@@ -17,7 +17,9 @@ const CONFIG = {
 	httpOnly: true,
 	signed: true,
 	rolling: false,
-	renew: false
+	renew: false,
+	domain: 'localhost',
+	path: '/session'
 };
 app.use(session(CONFIG, app));
 
