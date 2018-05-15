@@ -13,6 +13,12 @@ const userSchema = new Schema({
 		type: String,
 		required: true
 	},
+	loginAttepts:{
+		type:Number,
+		required:true,
+		default:0
+	},
+	lockUtil:Number,
 	meta: {
 		createdAt: {
 			type: Date,
@@ -24,6 +30,10 @@ const userSchema = new Schema({
 		}
 	}
 });
+
+userSchema.virtual('isLocked').get(() => {
+	return !!(this.lockUtil && this.lockUtil > Date.now())
+})
 
 userSchema.pre('save', function(next) {
 	let user = this;
@@ -53,6 +63,9 @@ userSchema.methods = {
 				else resolve(isMatch);
 			});
 		});
+	},
+	async incLoginAttepts(){
+
 	}
 };
 

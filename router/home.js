@@ -15,6 +15,7 @@ module.exports = router.get('/', async (ctx) => {
             <li><a href="/upload/index.html">/upload</a></li>
             <li><a href="/sign/index.html">/sign</a></li>
             <li><a href="/sign/login.html">/login</a></li>
+            <li><a href="/sign/reset.html">/resetPassword</a></li>
         </ul>
     `;
 	ctx.body = html;

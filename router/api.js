@@ -2,7 +2,7 @@ const api = require('koa-router')();
 
 const { getData, postData } = require('../controlers/request');
 const { upload } = require('../controlers/upload');
-const { sign, login } = require('../controlers/user');
+const { sign, login, reset } = require('../controlers/user');
 
 module.exports = api
 	.get('/get/data.json', async (ctx) => {
@@ -25,4 +25,5 @@ module.exports = api
 	.post('/postData', postData)
 	.post('/upload', upload)
 	.post('/sign', sign)
-	.post('/login', login);
+	.post('/login', login)
+	.post('/reset',reset);
