@@ -15,6 +15,7 @@
 </head>
 
 <body>
+    <h1>登录</h1>
     <form id="form">
         <div class="form-group">
             <label for="username">UserName</label>
@@ -28,6 +29,12 @@
     </form>
     <button type="submit" id="btn" class="btn btn-primary">登录</button>
     <a href="/sign/index.html" class="btn btn-primary">注册</a>
+
+    <div class="card" style="width: 100%;margin-top: 40px;">
+        <div class="card-body">
+            <p class="card-text" id="info"></p>
+        </div>
+    </div>
     <script src="https://cdn.bootcss.com/jquery/2.1.0/jquery.js"></script>
     <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
@@ -48,6 +55,7 @@
 
                 }).then((res) => {
                     console.log(res.data)
+                    $('#info').html(JSON.stringify(res.data))
                 })
             })
         })
