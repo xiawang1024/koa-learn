@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/xiawang1024/koa-learn#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "busboy": "^0.2.14",
     "glob": "^7.1.2",
     "koa": "^2.5.1",

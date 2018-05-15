@@ -13,6 +13,8 @@ module.exports = router.get('/', async (ctx) => {
             <li><a href="/cookie/setcookie">/cookie</a></li>
             <li><a href="/cookie/session">/session</a></li>
             <li><a href="/upload/index.html">/upload</a></li>
+            <li><a href="/sign/index.html">/sign</a></li>
+            <li><a href="/sign/login.html">/login</a></li>
         </ul>
     `;
 	ctx.body = html;

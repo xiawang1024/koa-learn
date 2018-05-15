@@ -1,10 +1,13 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 const Schema = mongoose.Schema;
+const SALT_WORK_FACTOR = 10;
 
 const userSchema = new Schema({
 	username: {
 		type: String,
-		required: true
+		required: true,
+		unique: true
 	},
 	password: {
 		type: String,
@@ -22,12 +25,35 @@ const userSchema = new Schema({
 	}
 });
 
-userSchema.pre('save', () => {
-	if (this.isNew) {
-		this.meta.createdAt = this.meta.updatedAt = Date.now();
+userSchema.pre('save', function(next) {
+	let user = this;
+	if (user.isNew) {
+		user.meta.createdAt = user.meta.updatedAt = Date.now();
 	} else {
-		this.meta.updatedAt = Date.now();
+		user.meta.updatedAt = Date.now();
 	}
+	if (!user.isModified('password')) return next();
+
+	bcrypt.genSalt(SALT_WORK_FACTOR, function(error, salt) {
+		if (error) return next(error);
+
+		bcrypt.hash(user.password, salt, function(err, hash) {
+			if (err) return next(err);
+			user.password = hash;
+			return next();
+		});
+	});
 });
+
+userSchema.methods = {
+	async comparePassword(_password) {
+		return new Promise((resolve, reject) => {
+			bcrypt.compare(_password, this.password, (error, isMatch) => {
+				if (error) reject(error);
+				else resolve(isMatch);
+			});
+		});
+	}
+};
 
 module.exports = mongoose.model('user', userSchema);
