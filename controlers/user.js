@@ -42,26 +42,27 @@ module.exports = {
 		}
 	},
 	async reset(ctx) {
-		const User = mongoose.model('user')
-		let postData = ctx.request.body
+		const User = mongoose.model('user');
+		let postData = ctx.request.body;
 		let resultUser = await User.findOne({ username: postData.username });
-		if(resultUser) {
-			let isMatch = await resultUser.comparePassword(postData.password)
-			if(isMatch) {
-				let updateUser = await User.update({username:postData.username},{$set:{password:postData.newPassword}})
-				ctx.body = {
-					code:0,
-					message:'密码修改成功，请用新的密码登录！',
-					data:updateUser
-				}
+		if (resultUser) {
+			let isMatch = await resultUser.comparePassword(postData.password);
+			if (isMatch) {
+				let updateUser = await resultUser.setPassword(postData.newPassword);
+				await User.updatePassword({ username: postData.username }, updateUser.password);
 
-			}else{
+				ctx.body = {
+					code: 0,
+					message: '密码修改成功，请用新的密码登录！',
+					data: updateUser
+				};
+			} else {
 				ctx.body = {
 					code: 1,
 					message: '原密码错误，请输入正确密码再次尝试！'
 				};
 			}
-		}else {
+		} else {
 			ctx.body = {
 				code: 1,
 				message: '帐号未注册，请先注册！'

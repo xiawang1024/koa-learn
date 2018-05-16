@@ -13,12 +13,12 @@ const userSchema = new Schema({
 		type: String,
 		required: true
 	},
-	loginAttepts:{
-		type:Number,
-		required:true,
-		default:0
+	loginAttepts: {
+		type: Number,
+		required: true,
+		default: 0
 	},
-	lockUtil:Number,
+	lockUtil: Number,
 	meta: {
 		createdAt: {
 			type: Date,
@@ -32,8 +32,8 @@ const userSchema = new Schema({
 });
 
 userSchema.virtual('isLocked').get(() => {
-	return !!(this.lockUtil && this.lockUtil > Date.now())
-})
+	return !!(this.lockUtil && this.lockUtil > Date.now());
+});
 
 userSchema.pre('save', function(next) {
 	let user = this;
@@ -64,9 +64,32 @@ userSchema.methods = {
 			});
 		});
 	},
-	async incLoginAttepts(){
+	async setPassword(newPassword) {
+		let user = this;
+		return new Promise((resolve, reject) => {
+			bcrypt.genSalt(SALT_WORK_FACTOR, function(error, salt) {
+				if (error) return reject(error);
 
+				bcrypt.hash(newPassword, salt, async function(err, hash) {
+					if (err) return reject(err);
+					user.password = hash;
+					resolve(user);
+				});
+			});
+		});
+	},
+	async incLoginAttepts() {}
+};
+
+userSchema.statics = {
+	async updatePassword(query, password) {
+		return new Promise(async (resolve, reject) => {
+			await this.update(query, { $set: { password } });
+			resolve();
+		});
 	}
 };
 
 module.exports = mongoose.model('user', userSchema);
+
+// $2a$10$EqDhpcnalZ.UnMdpfdRE6ebrcIqDoG28dM7CcAj235RQEfgthnFma
