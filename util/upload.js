@@ -5,7 +5,8 @@ const fs = require('fs');
 const Busboy = require('busboy');
 
 /**
- * 同步创建文件目录
+ * 同步递归创建文件目录
+ * /static/image/wx1024/1.jpg
  * @param  {string} dirname 目录绝对地址
  * @return {boolean}        创建目录结果
  */
@@ -43,7 +44,7 @@ function uploadFile(ctx, options) {
 
 	// 获取类型
 	let fileType = options.fileType || 'common';
-	let filePath = path.join(options.path, fileType);
+	let filePath = path.join(options.path, fileType); // /static/image/wx1024
 	let mkdirResult = mkdirsSync(filePath);
 
 	return new Promise((resolve, reject) => {
