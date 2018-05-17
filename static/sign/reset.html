@@ -64,6 +64,13 @@
                 }).then((res) => {
                     console.log(res.data)
                     $('#info').html(JSON.stringify(res.data))
+                }).catch(err => {
+                    if (err.response) {
+                        console.log(err.response)
+                        if (err.response.status == '401') {
+                            window.location.href = 'http://localhost:3000/sign/login.html'
+                        }
+                    }
                 })
             })
         })

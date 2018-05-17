@@ -5,6 +5,10 @@ const static = require('koa-static');
 const bodyParser = require('koa-bodyparser');
 const session = require('koa-session');
 const koaJwt = require('koa-jwt');
+const logger = require('koa-logger');
+
+//logger
+app.use(logger());
 
 //挂载数据库
 const { connect, initSchema } = require('./database/index');
@@ -19,6 +23,7 @@ app.use(function(ctx, next) {
 	return next().catch((err) => {
 		if (err.status === 401) {
 			ctx.status = 401;
+			console.log('redirect url ');
 			ctx.body = {
 				error: err.originalError ? err.originalError.message : err.message
 			};
