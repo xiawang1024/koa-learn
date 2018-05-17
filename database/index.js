@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
 const glob = require('glob');
 const path = require('path');
+const { mongoDBurl } = require('../config/index');
 mongoose.Promise = global.Promise;
-const config = {
-	dbUrl: 'mongodb://localhost:27017/login'
-};
 
 module.exports = {
 	async initSchema() {
@@ -13,14 +11,14 @@ module.exports = {
 	async connect() {
 		let maxConnectTimes = 0;
 		return new Promise((resolve, reject) => {
-			mongoose.connect(config.dbUrl);
+			mongoose.connect(mongoDBurl);
 
 			const db = mongoose.connection;
 
 			db.on('disconnected', () => {
 				maxConnectTimes++;
 				if (maxConnectTimes < 5) {
-					mongoose.connect(config.dbUrl);
+					mongoose.connect(mongoDBurl);
 				} else {
 					throw new Error('MongoDB disconnected');
 					reject();
@@ -30,7 +28,7 @@ module.exports = {
 			db.on('error', () => {
 				maxConnectTimes++;
 				if (maxConnectTimes < 5) {
-					mongoose.connect(config.dbUrl);
+					mongoose.connect(mongoDBurl);
 				} else {
 					throw new Error('MongoDB is not work');
 					reject();

@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const { jwt_secret } = require('../config/index');
 module.exports = {
 	async sign(ctx) {
 		const User = mongoose.model('user');
@@ -23,9 +25,11 @@ module.exports = {
 		if (resultUser) {
 			let isMatch = await resultUser.comparePassword(postData.password);
 			if (isMatch) {
+				let token = jwt.sign({ data: resultUser }, jwt_secret, { expiresIn: '1h' });
 				ctx.body = {
 					code: 0,
 					message: '登录成功！',
+					token,
 					userInfo: resultUser
 				};
 			} else {

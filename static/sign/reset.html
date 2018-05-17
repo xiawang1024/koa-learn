@@ -48,10 +48,13 @@
                 let username = $('#username').val()
                 let password = $('#oldPassword').val()
                 let newPassword = $('#newPassword').val()
-
+                let token = sessionStorage.getItem('token')
                 axios({
                     url: '/api/reset',
                     method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
                     data: {
                         username,
                         password,

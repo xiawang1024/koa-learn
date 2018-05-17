@@ -55,7 +55,11 @@
                     },
 
                 }).then((res) => {
-                    console.log(res.data)
+                    let data = res.data
+                    if (!data.code) {
+                        console.log(res.data)
+                        sessionStorage.setItem('token', data.token)
+                    }
                     $('#info').html(JSON.stringify(res.data))
                 })
             })
