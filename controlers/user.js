@@ -24,8 +24,6 @@ module.exports = {
 		let resultUser = await User.findOne({ username: postData.username });
 		if (resultUser) {
 			let isMatch = await resultUser.comparePassword(postData.password);
-			await resultUser.incLoginAttepts();
-			console.log(resultUser.isLocked);
 			if (isMatch) {
 				let token = jwt.sign({ data: resultUser }, jwt_secret, { expiresIn: '1h' });
 				ctx.body = {
@@ -35,6 +33,7 @@ module.exports = {
 					userInfo: resultUser
 				};
 			} else {
+				await resultUser.incLoginAttepts();
 				ctx.body = {
 					code: 1,
 					message: '密码错误，请输入正确密码再次登录！'
