@@ -7,6 +7,10 @@ const session = require('koa-session');
 const koaJwt = require('koa-jwt');
 const logger = require('koa-logger');
 const views = require('koa-views');
+const helmet = require('helmet');
+
+//helmet安全防护中间件
+// app.use(helmet());
 
 //logger
 app.use(logger());
@@ -43,7 +47,7 @@ const { jwt_secret } = require('./config/index');
 app.use(
 	koaJwt({
 		secret: jwt_secret
-	}).unless({ path: [ /\/home/, /\/sign/, /\/api\/login/, /\/api\/sign/ ] })
+	}).unless({ path: [ /\/home/, /\/public/ ] })
 );
 
 //使用ctx.body解析中间件
@@ -65,8 +69,8 @@ const CONFIG = {
 app.use(session(CONFIG, app));
 
 // 加载路由;
-const routers = require('./router/index');
-app.use(routers.routes(), routers.allowedMethods());
+const router = require('./router/index');
+app.use(router.routes(), router.allowedMethods());
 
 //挂载静态资源
 const staticPath = './static';
