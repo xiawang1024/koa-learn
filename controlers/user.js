@@ -24,6 +24,8 @@ module.exports = {
 		let resultUser = await User.findOne({ username: postData.username });
 		if (resultUser) {
 			let isMatch = await resultUser.comparePassword(postData.password);
+			await resultUser.incLoginAttepts();
+			console.log(resultUser.isLocked);
 			if (isMatch) {
 				let token = jwt.sign({ data: resultUser }, jwt_secret, { expiresIn: '1h' });
 				ctx.body = {
@@ -53,8 +55,6 @@ module.exports = {
 			let isMatch = await resultUser.comparePassword(postData.password);
 			if (isMatch) {
 				let updateUser = await resultUser.setPassword(postData.newPassword);
-				await User.updatePassword({ username: postData.username }, updateUser.password);
-
 				ctx.body = {
 					code: 0,
 					message: '密码修改成功，请用新的密码登录！',

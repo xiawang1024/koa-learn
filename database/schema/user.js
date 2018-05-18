@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const Schema = mongoose.Schema;
 const SALT_WORK_FACTOR = 10;
+const MAX_LOGIN_TIMES = 5;
+const LOCK_TIME = 20 * 60 * 1000; //20分钟
 
 const userSchema = new Schema({
 	username: {
@@ -31,7 +33,7 @@ const userSchema = new Schema({
 	}
 });
 
-userSchema.virtual('isLocked').get(() => {
+userSchema.virtual('isLocked').get(function() {
 	return !!(this.lockUtil && this.lockUtil > Date.now());
 });
 
@@ -72,24 +74,49 @@ userSchema.methods = {
 
 				bcrypt.hash(newPassword, salt, async function(err, hash) {
 					if (err) return reject(err);
-					user.password = hash;
+					await user.update({ $set: { password: hash } });
 					resolve(user);
 				});
 			});
 		});
 	},
-	async incLoginAttepts() {}
-};
-
-userSchema.statics = {
-	async updatePassword(query, password) {
-		return new Promise(async (resolve, reject) => {
-			await this.update(query, { $set: { password } });
-			resolve();
+	async incLoginAttepts() {
+		let user = this;
+		return new Promise((resolve, reject) => {
+			let updates = {};
+			if (this.lockUtil && this.lockUtil < Date.now()) {
+				updates = {
+					$set: {
+						loginAttepts: 1
+					},
+					$unset: {
+						lockUtil: 1
+					}
+				};
+				user.update(updates, (err) => {
+					if (err) reject(err);
+					else resolve(true);
+				});
+			} else {
+				updates = {
+					$inc: {
+						loginAttepts: 1
+					}
+				};
+				if (user.loginAttepts + 1 > MAX_LOGIN_TIMES && !user.isLocked) {
+					updates.$set = {
+						lockUtil: Date.now() + LOCK_TIME
+					};
+				}
+				user.update(updates, (err) => {
+					if (err) reject(err);
+					else resolve(true);
+				});
+			}
 		});
 	}
 };
 
 module.exports = mongoose.model('user', userSchema);
 
-// $2a$10$EqDhpcnalZ.UnMdpfdRE6ebrcIqDoG28dM7CcAj235RQEfgthnFma
+//1526617435597
