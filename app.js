@@ -6,7 +6,6 @@ const bodyParser = require('koa-bodyparser');
 const session = require('koa-session');
 const koaJwt = require('koa-jwt');
 const logger = require('koa-logger');
-const views = require('koa-views');
 
 //logger
 app.use(logger());
@@ -18,19 +17,13 @@ const { connect, initSchema } = require('./database/index');
 	initSchema();
 })();
 
-//加载模板引擎
-app.use(
-	views(path.join(__dirname, './view'), {
-		extension: 'pug'
-	})
-);
-
 //jwt验证
 // 当token验证异常时候的处理，如token过期、token错误
 app.use(function(ctx, next) {
 	return next().catch((err) => {
 		if (err.status === 401) {
 			ctx.status = 401;
+			console.log('redirect url ');
 			ctx.body = {
 				error: err.originalError ? err.originalError.message : err.message
 			};

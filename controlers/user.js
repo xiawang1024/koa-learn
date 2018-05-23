@@ -33,7 +33,6 @@ module.exports = {
 					userInfo: resultUser
 				};
 			} else {
-				await resultUser.incLoginAttepts();
 				ctx.body = {
 					code: 1,
 					message: '密码错误，请输入正确密码再次登录！'
@@ -54,6 +53,8 @@ module.exports = {
 			let isMatch = await resultUser.comparePassword(postData.password);
 			if (isMatch) {
 				let updateUser = await resultUser.setPassword(postData.newPassword);
+				await User.updatePassword({ username: postData.username }, updateUser.password);
+
 				ctx.body = {
 					code: 0,
 					message: '密码修改成功，请用新的密码登录！',
