@@ -35,7 +35,7 @@ app.use(function(ctx, next) {
 	return next().catch((err) => {
 		if (err.status === 401) {
 			ctx.status = 401;
-			ctx.redirect('/public/sign/login.html');
+			// ctx.redirect('/public/sign/login.html');
 			ctx.body = {
 				error: err.originalError ? err.originalError.message : err.message
 			};
@@ -48,7 +48,7 @@ const { jwt_secret } = require('./config/index');
 app.use(
 	koaJwt({
 		secret: jwt_secret
-	}).unless({ path: [ /\/home/, /\/public/ ] })
+	}).unless({ path: [ /\/home/, /\/public/, /\/sign/, /\/login/ ] })
 );
 
 //使用ctx.body解析中间件
