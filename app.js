@@ -1,3 +1,4 @@
+const http = require('http');
 const Koa = require('koa');
 const app = new Koa();
 const path = require('path');
@@ -77,6 +78,10 @@ app.use(router.routes(), router.allowedMethods());
 const staticPath = './static';
 app.use(static(path.join(__dirname, staticPath)));
 
-app.listen(3000, () => {
+// 增加socket
+const server = http.createServer(app.callback());
+const socket = require('./router/socket');
+socket.initSocket(server);
+server.listen(3000, () => {
 	console.log('Listening port 3000');
 });

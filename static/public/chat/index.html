@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Socket.io</title>
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px
+        }
+    </style>
+</head>
+
+<body>
+    <form>
+        <div class="form-group">
+            <label for="ipt">Input You Msg</label>
+            <input type="text" class="form-control" id="ipt" aria-describedby="emailHelp" placeholder="Input You Msg">
+            <small id="msg" class="form-text text-muted"></small>
+        </div>
+        <button type="submit" class="btn btn-primary" id="send">send</button>
+    </form>
+    <script src="https://cdn.bootcss.com/jquery/2.1.0/jquery.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script>
+        const socket = io()
+        socket.on('connect', () => {
+            socket.on('user connected', (msg) => {
+                $('#msg').html(msg)
+            })
+            socket.on('yourself msg', (msg) => {
+                alert(msg)
+            })
+
+            socket.on('all msg', (msg) => {
+                alert(msg)
+            })
+        })
+
+        $('#send').click(function () {
+            let msg = $('#ipt').val()
+            socket.emit('msg', msg)
+        })
+    </script>
+</body>
+
+</html>
