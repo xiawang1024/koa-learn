@@ -22,6 +22,13 @@ const { connect, initSchema } = require('./database/index');
 	initSchema();
 })();
 
+//加载模板引擎
+app.use(
+	views(path.join(__dirname, './view'), {
+		extension: 'pug'
+	})
+);
+
 //jwt验证
 // 当token验证异常时候的处理，如token过期、token错误
 app.use(function(ctx, next) {
