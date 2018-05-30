@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>注册</title>
+    <title>登录</title>
     <link href="https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -15,7 +15,7 @@
 </head>
 
 <body>
-    <h1>注册</h1>
+    <h1>登录</h1>
     <form id="form">
         <div class="form-group">
             <label for="username">UserName</label>
@@ -27,8 +27,10 @@
             <input type="password" class="form-control" id="password" placeholder="Password">
         </div>
     </form>
-    <button type="submit" id="btn" class="btn btn-primary">注册</button>
-    <a href="/sign/login.html" class="btn btn-primary">登录</a>
+    <button type="submit" id="btn" class="btn btn-primary">登录</button>
+    <a href="/public/sign/index.html" class="btn btn-primary">注册</a>
+    <a href="/public/sign/reset.html" class="btn btn-primary">修改登录密码</a>
+
     <div class="card" style="width: 100%;margin-top: 40px;">
         <div class="card-body">
             <p class="card-text" id="info"></p>
@@ -45,7 +47,7 @@
                 let password = $('#password').val()
 
                 axios({
-                    url: '/api/sign',
+                    url: '/api/login',
                     method: 'POST',
                     data: {
                         username,
@@ -53,7 +55,11 @@
                     },
 
                 }).then((res) => {
-                    console.log(res.data)
+                    let data = res.data
+                    if (!data.code) {
+                        console.log(res.data)
+                        sessionStorage.setItem('token', data.token)
+                    }
                     $('#info').html(JSON.stringify(res.data))
                 })
             })

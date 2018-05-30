@@ -1,3 +1,4 @@
+const http = require('http');
 const Koa = require('koa');
 const app = new Koa();
 const path = require('path');
@@ -6,6 +7,11 @@ const bodyParser = require('koa-bodyparser');
 const session = require('koa-session');
 const koaJwt = require('koa-jwt');
 const logger = require('koa-logger');
+const views = require('koa-views');
+const helmet = require('helmet');
+
+//helmet安全防护中间件
+// app.use(helmet());
 
 //logger
 app.use(logger());
@@ -17,10 +23,12 @@ const { connect, initSchema } = require('./database/index');
 	initSchema();
 })();
 
-// 微信配置
-const wechat = require('./wechat/index');
-// console.log(wechat);
-app.use(wechat());
+//加载模板引擎
+app.use(
+	views(path.join(__dirname, './view'), {
+		extension: 'pug'
+	})
+);
 
 //jwt验证
 // 当token验证异常时候的处理，如token过期、token错误
@@ -28,7 +36,7 @@ app.use(function(ctx, next) {
 	return next().catch((err) => {
 		if (err.status === 401) {
 			ctx.status = 401;
-			console.log('redirect url ');
+			// ctx.redirect('/public/sign/login.html');
 			ctx.body = {
 				error: err.originalError ? err.originalError.message : err.message
 			};
@@ -41,7 +49,7 @@ const { jwt_secret } = require('./config/index');
 app.use(
 	koaJwt({
 		secret: jwt_secret
-	}).unless({ path: [ /\/home/, /\/sign/, /\/api\/login/, /\/api\/sign/ ] })
+	}).unless({ path: [ /\/home/, /\/public/, /\/sign/, /\/login/ ] })
 );
 
 //使用ctx.body解析中间件
@@ -63,13 +71,17 @@ const CONFIG = {
 app.use(session(CONFIG, app));
 
 // 加载路由;
-const routers = require('./router/index');
-app.use(routers.routes(), routers.allowedMethods());
+const router = require('./router/index');
+app.use(router.routes(), router.allowedMethods());
 
 //挂载静态资源
 const staticPath = './static';
 app.use(static(path.join(__dirname, staticPath)));
 
-app.listen(3000, () => {
+// 增加socket
+const server = http.createServer(app.callback());
+const socket = require('./router/socket');
+socket.initSocket(server);
+server.listen(3000, () => {
 	console.log('Listening port 3000');
 });

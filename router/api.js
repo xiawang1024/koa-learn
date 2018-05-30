@@ -26,4 +26,4 @@ module.exports = api
 	.post('/upload', upload)
 	.post('/sign', sign)
 	.post('/login', login)
-	.post('/reset',reset);
+	.post('/reset', reset);

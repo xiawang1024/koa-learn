@@ -20,5 +20,21 @@ const puppeteer = require('puppeteer');
 		});
 		return songList[index].querySelector('.js_song').getAttribute('href');
 	}, SONG_LIST);
-	console.log(songHref);
+	await page.goto(songHref);
+
+	await page.waitFor('.comment__list.js_all_list');
+	const COMMENT_LIST = await page.$('.comment__list.js_all_list');
+
+	const commentList = await page.evaluate((list) => {
+		const comList = Array.from(list.querySelectorAll('.comment__list_item'));
+		const userList = comList.map((item, index) => {
+			let avatar = item.querySelector('.js_lazy_comment_pic').getAttribute('src');
+			let name = item.querySelector('.c_tx_thin.js_nick.js_nick_only').innerHTML;
+			let content = item.querySelector('.c_tx_normal.comment__text.js_hot_text').innerHTML;
+			return { avatar, name, content };
+		});
+		return userList;
+	}, COMMENT_LIST);
+
+	console.log(commentList);
 })();
