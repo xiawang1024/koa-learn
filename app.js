@@ -49,7 +49,7 @@ const { jwt_secret } = require('./config/index');
 app.use(
 	koaJwt({
 		secret: jwt_secret
-	}).unless({ path: [ /\/home/, /\/public/, /\/sign/, /\/login/ ] })
+	}).unless({ path: [ /\/home/, /\/public/, /\/sign/, /\/login/, /\github/ ] })
 );
 
 //使用ctx.body解析中间件
