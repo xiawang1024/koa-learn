@@ -22,12 +22,16 @@ module.exports = router
 				client_secret: config.client_secret,
 				code: code
 			}
-		}).then((res) => {
-			let data = res.data;
-			let args = data.split('&');
-			let arg = args[0].split('=');
-			return arg[1];
-		});
+		})
+			.then((res) => {
+				let data = res.data;
+				let args = data.split('&');
+				let arg = args[0].split('=');
+				return arg[1];
+			})
+			.catch((err) => {
+				ctx.body = 'error';
+			});
 		let userInfo = await axios({
 			method: 'get',
 			url: 'https://api.github.com/user',
@@ -38,5 +42,9 @@ module.exports = router
 			let data = res.data;
 			return data;
 		});
-		ctx.body = JSON.stringify(userInfo);
+		if (userInfo) {
+			ctx.body = JSON.stringify(userInfo);
+		} else {
+			ctx.body = 'code是不可用的！';
+		}
 	});

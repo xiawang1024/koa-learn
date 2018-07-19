@@ -6,7 +6,8 @@ mongoose.Promise = global.Promise;
 
 module.exports = {
 	async initSchema() {
-		glob.sync(path.join(__dirname, './schema', '**/*.js')).forEach(require);
+		// glob.sync(path.join(__dirname, './schema', '**/*.js')).forEach(require);
+		require('./schema/hndt');
 	},
 	async connect() {
 		let maxConnectTimes = 0;

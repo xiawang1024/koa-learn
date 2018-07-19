@@ -46,11 +46,11 @@ app.use(function(ctx, next) {
 	});
 });
 const { jwt_secret } = require('./config/index');
-app.use(
-	koaJwt({
-		secret: jwt_secret
-	}).unless({ path: [ /\/home/, /\/public/, /\/sign/, /\/login/, /\github/ ] })
-);
+// app.use(
+// 	koaJwt({
+// 		secret: jwt_secret
+// 	}).unless({ path: [ /^\/home/, /^\/public/, /^\/sign/, /^\/login/, /^\/github/ ] })
+// );
 
 //使用ctx.body解析中间件
 app.use(bodyParser());
