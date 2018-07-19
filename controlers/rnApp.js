@@ -6,5 +6,7 @@ module.exports = {
 		ctx.body = userList;
 		next();
 	},
-	async rnEdit(ctx) {}
+	async rnEdit(ctx, next) {
+		let data = ctx.request.body;
+	}
 };
