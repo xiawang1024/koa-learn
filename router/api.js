@@ -28,5 +28,5 @@ module.exports = api
 	.post('/sign', sign)
 	.post('/login', login)
 	.post('/reset', reset)
-	.get('/rnGet', rnGet)
+	.get('/rnGet/:page/:count', rnGet)
 	.del('/rnDelete', rnDelete);

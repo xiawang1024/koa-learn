@@ -2,8 +2,10 @@ const mongoose = require('mongoose');
 
 module.exports = {
 	async rnGet(ctx, next) {
+		let { page, count } = ctx.params;
+		console.log(count);
 		const User = mongoose.model('user');
-		let userList = await User.find({});
+		let userList = await User.find({}).limit(parseInt(count)).skip(parseInt(page));
 		ctx.body = userList;
 		next();
 	},
