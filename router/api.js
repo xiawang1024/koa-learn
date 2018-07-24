@@ -29,6 +29,6 @@ module.exports = api
 	.post('/login', login)
 	.post('/reset', reset)
 	.get('/rnGet/:name', rnGet)
-	.del('/rnDelete', rnDelete)
+	.del('/rnDelete/:name', rnDelete)
 	.post('/rnEdit', rnEdit)
 	.post('/rnAdd', rnAdd);
