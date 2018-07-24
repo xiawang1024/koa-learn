@@ -6,6 +6,7 @@ const userSchema = new Schema({
 	openId: String,
 	mobile: String,
 	icon: String,
+	age: Number,
 	meta: {
 		createdAt: {
 			type: Date,
@@ -17,5 +18,14 @@ const userSchema = new Schema({
 		}
 	}
 });
-
+userSchema.add({ city: 'string' });
+userSchema.pre('save', function(next) {
+	let user = this;
+	if (user.isNew) {
+		user.meta.createdAt = user.meta.updatedAt = Date.now();
+	} else {
+		user.meta.updatedAt = Date.now();
+	}
+	next();
+});
 module.exports = mongoose.model('user', userSchema);
