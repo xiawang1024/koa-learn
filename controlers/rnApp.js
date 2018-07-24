@@ -3,12 +3,17 @@ const mongoose = require('mongoose');
 module.exports = {
 	async rnGet(ctx, next) {
 		const User = mongoose.model('user');
-		let userList = await User.find({ age: { $lt: 30 } });
+		let { name } = ctx.params;
+		let userList = await User.find({ name });
 		ctx.body = userList;
 		next();
 	},
 	async rnEdit(ctx, next) {
-		let data = ctx.request.body;
+		const User = mongoose.model('user');
+		let { name, city } = ctx.request.body;
+		let updateUser = await User.findOneAndUpdate({ name }, { city });
+		ctx.body = JSON.stringify(updateUser);
+		next();
 	},
 	async rnDelete(ctx, next) {
 		const User = mongoose.model('user');

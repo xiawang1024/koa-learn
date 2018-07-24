@@ -28,4 +28,10 @@ userSchema.pre('save', function(next) {
 	}
 	next();
 });
+
+userSchema.pre('findOneAndUpdate', function(next) {
+	let user = this;
+	user.update({}, { $set: { meta: { updatedAt: Date.now() } } });
+	next();
+});
 module.exports = mongoose.model('user', userSchema);
