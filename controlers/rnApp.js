@@ -4,15 +4,21 @@ module.exports = {
 	async rnGet(ctx, next) {
 		const User = mongoose.model('user');
 		let { name } = ctx.params;
-		let userList = await User.find({ name });
+		let userList = null;
+		if (name === 'all') {
+			userList = await User.find({});
+		} else {
+			userList = await User.find({ name });
+		}
 		ctx.body = userList;
 		next();
 	},
 	async rnEdit(ctx, next) {
 		const User = mongoose.model('user');
-		let { name, city } = ctx.request.body;
-		let updateUser = await User.findOneAndUpdate({ name }, { city });
-		ctx.body = JSON.stringify(updateUser);
+		let { _id, name, mobile } = ctx.request.body;
+		let updateUser = await User.findByIdAndUpdate({ _id }, { name, mobile });
+		console.log(updateUser);
+		ctx.body = JSON.stringify({ status: 0, updateUser });
 		next();
 	},
 	async rnDelete(ctx, next) {
