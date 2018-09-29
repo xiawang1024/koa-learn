@@ -33,6 +33,14 @@ module.exports = {
 					userInfo: resultUser
 				};
 			} else {
+				if (resultUser.isLocked) {
+					ctx.body = {
+						code: 1,
+						message: '密码输入错误次数过多已锁定，请20分钟后再试！'
+					};
+					return;
+				}
+				console.log(resultUser.isLocked);
 				await resultUser.incLoginAttepts();
 				ctx.body = {
 					code: 1,
@@ -53,12 +61,21 @@ module.exports = {
 		if (resultUser) {
 			let isMatch = await resultUser.comparePassword(postData.password);
 			if (isMatch) {
-				let updateUser = await resultUser.setPassword(postData.newPassword);
-				ctx.body = {
-					code: 0,
-					message: '密码修改成功，请用新的密码登录！',
-					data: updateUser
-				};
+				resultUser.password = postData.newPassword;
+				let updateUser = await resultUser.save();
+				if (updateUser) {
+					ctx.body = {
+						code: 0,
+						message: '密码修改成功，请用新的密码登录！',
+						data: updateUser
+					};
+				} else {
+					ctx.body = {
+						code: 0,
+						message: '密码修改失败，请重新修改！'
+					};
+				}
+				console.log(updateUser);
 			} else {
 				ctx.body = {
 					code: 1,
