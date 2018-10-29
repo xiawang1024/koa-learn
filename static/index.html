@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    body {
+      text-align: center;
+    }
+
+    .btn {
+      width: 120px;
+      height: 60px;
+      margin: 60px auto;
+      border: none;
+      border-radius: 10px;
+      outline: none;
+      background: #1aad19;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Welcome to weChat_oauth </h2>
+  <button class="btn" id="btn">获取用户信息</button>
+  <script>
+    document.getElementById('btn').addEventListener('click', () => {
+      window.location = '/wechat/getCode'
+    }, false)
+  </script>
+</body>
+
+</html>

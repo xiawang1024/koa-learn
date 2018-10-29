@@ -1,32 +1,11 @@
-extends ./layouts/default.pug
-
-block title 
-    title #{title}
-        
-block content
-    include ./includes/navs.pug
+doctype html
+html(lang="zh")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        meta(http-equiv="X-UA-Compatible", content="ie=edge")
+        title 用户信息 
+    body
     
-    h2 #{title} 
-    ul.list-group
-        li.list-group-item
-            a(href='/page/helloworld') /page/helloworld
-        li.list-group-item
-            a(href='/page/form') /page/form
-        li.list-group-item
-            a(href='/page/404') /page/404
-        li.list-group-item
-            a(href='/js/index.js') /js/index.js
-        li.list-group-item
-            a(href='/api/get/data.json') /api/get/data.json
-        li.list-group-item
-            a(href='/api/get/user.json') /api/get/user.json
-        li.list-group-item
-            a(href='/api/getData?name=wangxia&age=28') /api/getData?name=wangxia&age=28
-        li.list-group-item
-            a(href='/cookie/setcookie') /cookie/setcookie
-        li.list-group-item
-            a(href='/cookie/session') /cookie/session
-        li.list-group-item
-            a(href='/public/upload/index.html') /upload/index.html
-        li.list-group-item
-            a(href='/public/chat/index.html') /socket/index.html
+        h2 #{userInfo} 
+    
