@@ -5,8 +5,20 @@ html(lang="zh")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         meta(http-equiv="X-UA-Compatible", content="ie=edge")
         title 用户信息 
+        style.
+            h2{
+                font-family: "PT Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+                font-size:15px;
+            }
+            .avatar{
+                width: 100px;
+                height:100px;
+            }
     body
-    
-        h2 #{userInfo.nickname} 
-        img(src=#{userInfo.headimgurl})
+        h2 openid: #{userInfo.openid}
+        h2 nickname: #{userInfo.nickname} 
+        h2 sex: #{userInfo.sex}
+        h2 province: #{userInfo.province}
+        h2 city: #{userInfo.city}
+        img.avatar(src=userInfo.headimgurl)
     
