@@ -25,7 +25,7 @@ module.exports = {
   deploy: {
     production: {
       key: '~/.ssh/google_rsa',
-      user: 'wx',
+      user: 'xiawang1024',
       host: '35.194.208.201',
       ref: 'origin/wechat',
       repo: 'https://github.com/xiawang1024/koa-learn.git',
