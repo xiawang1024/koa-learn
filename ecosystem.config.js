@@ -29,7 +29,7 @@ module.exports = {
       host: '35.194.208.201',
       ref: 'origin/wechat',
       repo: 'https://github.com/xiawang1024/koa-learn.git',
-      path: '/home/work/production/weChat',
+      path: '/home/xiawang1024/WWW/production/weChat',
       'post-deploy':
         'npm install && pm2 reload ecosystem.config.js --env production'
     }
