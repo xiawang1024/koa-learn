@@ -24,4 +24,6 @@ app.use(router.routes(), router.allowedMethods())
 const staticPath = './static'
 app.use(static(path.join(__dirname, staticPath)))
 
-app.listen(3002)
+const port = process.env.PORT
+
+app.listen(port)

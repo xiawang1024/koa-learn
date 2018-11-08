@@ -3,7 +3,7 @@ const appID = 'wx177b80ba98f18011'
 const secret = 'f8c4c2d3036e1eb4a269c3be4a10a8a6'
 module.exports = {
   async getCode(ctx) {
-    let redirectUrl = 'https://we.wx1024.club/wechat/getUserInfo'
+    let redirectUrl = 'https://wechat.wx1024.club/wechat/getUserInfo'
     let authorizeUrl =
       `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appID}&redirect_uri=` +
       `${redirectUrl}&response_type=code&scope=snsapi_userinfo&state=wx1024#wechat_redirect`
