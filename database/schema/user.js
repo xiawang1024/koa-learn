@@ -2,11 +2,8 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const Schema = mongoose.Schema
 const SALT_WORK_FACTOR = 10
-<<<<<<< HEAD
-=======
 const MAX_LOGIN_TIMES = 5
 const LOCK_TIME = 20 * 60 * 1000 //20分钟
->>>>>>> efa3951d262c25cc6c39215c969e208b31e09fed
 
 const userSchema = new Schema({
   username: {
@@ -36,11 +33,7 @@ const userSchema = new Schema({
   }
 })
 
-<<<<<<< HEAD
-userSchema.virtual('isLocked').get(() => {
-=======
 userSchema.virtual('isLocked').get(function() {
->>>>>>> efa3951d262c25cc6c39215c969e208b31e09fed
   return !!(this.lockUtil && this.lockUtil > Date.now())
 })
 
@@ -73,13 +66,20 @@ userSchema.methods = {
       })
     })
   },
+  async setPassword(newPassword) {
+    let user = this
+    return new Promise((resolve, reject) => {
+      bcrypt.genSalt(SALT_WORK_FACTOR, function(error, salt) {
+        if (error) return reject(error)
 
-<<<<<<< HEAD
-  async incLoginAttepts() {}
-}
-
-module.exports = mongoose.model('user', userSchema)
-=======
+        bcrypt.hash(newPassword, salt, async function(err, hash) {
+          if (err) return reject(err)
+          await user.update({ $set: { password: hash } })
+          resolve(user)
+        })
+      })
+    })
+  },
   async incLoginAttepts() {
     let user = this
     return new Promise((resolve, reject) => {
@@ -118,6 +118,3 @@ module.exports = mongoose.model('user', userSchema)
 }
 
 module.exports = mongoose.model('user', userSchema)
-
-//1526617435597
->>>>>>> efa3951d262c25cc6c39215c969e208b31e09fed
