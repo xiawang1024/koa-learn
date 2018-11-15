@@ -3,6 +3,9 @@ const jwt = require('jsonwebtoken')
 const { jwt_secret } = require('../config/index')
 module.exports = {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> efa3951d262c25cc6c39215c969e208b31e09fed
   async sign(ctx) {
     const User = mongoose.model('user')
     let postData = ctx.request.body
@@ -11,7 +14,11 @@ module.exports = {
       ctx.body = {
         code: 1,
         success: false,
+<<<<<<< HEAD
         message: '该用户已注册，请直接登录！'
+=======
+        message: '账号已注册，请直接登录！'
+>>>>>>> efa3951d262c25cc6c39215c969e208b31e09fed
       }
     } else {
       newUser = new User(postData)
@@ -24,6 +31,7 @@ module.exports = {
     let postData = ctx.request.body
     let resultUser = await User.findOne({ username: postData.username })
     if (resultUser) {
+<<<<<<< HEAD
       let isMatch = await resultUser.comparePassword(postData.password)
       if (isMatch) {
         let token = jwt.sign({ data: resultUser }, jwt_secret, {
@@ -39,12 +47,46 @@ module.exports = {
         ctx.body = {
           code: 1,
           message: '密码错误，请输入正确密码再次登录！'
+=======
+      // 如果账号被锁定
+      if (resultUser.isLocked) {
+        ctx.body = {
+          code: 1,
+          message: '密码输入错误次数过多，账号已锁定，请20分钟后再试！'
+        }
+      } else {
+        //账号未锁定
+        let isMatch = await resultUser.comparePassword(postData.password)
+        // 密码匹配
+        if (isMatch) {
+          //生成token，1小时过期
+          let token = jwt.sign({ data: resultUser }, jwt_secret, {
+            expiresIn: '1h'
+          })
+          ctx.body = {
+            code: 0,
+            message: '登录成功！',
+            token,
+            userInfo: resultUser
+          }
+        } else {
+          //密码错误，登录次数累加
+          await resultUser.incLoginAttepts()
+          ctx.body = {
+            code: 1,
+            message: '密码错误，请输入正确密码再次登录！'
+          }
+>>>>>>> efa3951d262c25cc6c39215c969e208b31e09fed
         }
       }
     } else {
       ctx.body = {
         code: 1,
+<<<<<<< HEAD
         message: '帐号未注册，请先注册！'
+=======
+        message: '改帐号未注册，请先注册！'
+>>>>>>> efa3951d262c25cc6c39215c969e208b31e09fed
       }
     }
   },
@@ -56,11 +98,28 @@ module.exports = {
       let isMatch = await resultUser.comparePassword(postData.password)
       if (isMatch) {
         resultUser.password = postData.newPassword
+<<<<<<< HEAD
         await resultUser.save()
         ctx.body = {
           code: 0,
           message: '密码修改成功！'
         }
+=======
+        let updateUser = await resultUser.save()
+        if (updateUser) {
+          ctx.body = {
+            code: 0,
+            message: '密码修改成功！',
+            data: updateUser
+          }
+        } else {
+          ctx.body = {
+            code: 0,
+            message: '密码修改失败！'
+          }
+        }
+        console.log(updateUser)
+>>>>>>> efa3951d262c25cc6c39215c969e208b31e09fed
       } else {
         ctx.body = {
           code: 1,
@@ -70,11 +129,16 @@ module.exports = {
     } else {
       ctx.body = {
         code: 1,
+<<<<<<< HEAD
         message: '帐号未注册，请先注册！'
+=======
+        message: '帐号未注册！'
+>>>>>>> efa3951d262c25cc6c39215c969e208b31e09fed
       }
     }
   }
 }
+<<<<<<< HEAD
 =======
 	async sign(ctx) {
 		const User = mongoose.model('user');
@@ -165,3 +229,5 @@ module.exports = {
 	}
 };
 >>>>>>> login
+=======
+>>>>>>> efa3951d262c25cc6c39215c969e208b31e09fed
