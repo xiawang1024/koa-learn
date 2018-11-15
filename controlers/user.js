@@ -10,7 +10,7 @@ module.exports = {
       ctx.body = {
         code: 1,
         success: false,
-        message: '该邮箱已注册，请更换其它邮箱！'
+        message: '账号已注册，请直接登录！'
       }
     } else {
       newUser = new User(postData)
@@ -23,30 +23,34 @@ module.exports = {
     let postData = ctx.request.body
     let resultUser = await User.findOne({ username: postData.username })
     if (resultUser) {
-      let isMatch = await resultUser.comparePassword(postData.password)
-      if (isMatch) {
-        let token = jwt.sign({ data: resultUser }, jwt_secret, {
-          expiresIn: '1h'
-        })
-        ctx.body = {
-          code: 0,
-          message: '登录成功！',
-          token,
-          userInfo: resultUser
-        }
-      } else {
-        if (resultUser.isLocked) {
-          ctx.body = {
-            code: 1,
-            message: '密码输入错误次数过多已锁定，请20分钟后再试！'
-          }
-          return
-        }
-        console.log(resultUser.isLocked)
-        await resultUser.incLoginAttepts()
+      // 如果账号被锁定
+      if (resultUser.isLocked) {
         ctx.body = {
           code: 1,
-          message: '密码错误，请输入正确密码再次登录！'
+          message: '密码输入错误次数过多，账号已锁定，请20分钟后再试！'
+        }
+      } else {
+        //账号未锁定
+        let isMatch = await resultUser.comparePassword(postData.password)
+        // 密码匹配
+        if (isMatch) {
+          //生成token，1小时过期
+          let token = jwt.sign({ data: resultUser }, jwt_secret, {
+            expiresIn: '1h'
+          })
+          ctx.body = {
+            code: 0,
+            message: '登录成功！',
+            token,
+            userInfo: resultUser
+          }
+        } else {
+          //密码错误，登录次数累加
+          await resultUser.incLoginAttepts()
+          ctx.body = {
+            code: 1,
+            message: '密码错误，请输入正确密码再次登录！'
+          }
         }
       }
     } else {
@@ -68,26 +72,26 @@ module.exports = {
         if (updateUser) {
           ctx.body = {
             code: 0,
-            message: '密码修改成功，请用新的密码登录！',
+            message: '密码修改成功！',
             data: updateUser
           }
         } else {
           ctx.body = {
             code: 0,
-            message: '密码修改失败，请重新修改！'
+            message: '密码修改失败！'
           }
         }
         console.log(updateUser)
       } else {
         ctx.body = {
           code: 1,
-          message: '原密码错误，请输入正确密码再次尝试！'
+          message: '原密码错误！'
         }
       }
     } else {
       ctx.body = {
         code: 1,
-        message: '帐号未注册，请先注册！'
+        message: '帐号未注册！'
       }
     }
   }
