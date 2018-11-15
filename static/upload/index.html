@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>upload</title>
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="form">
+        <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlFile1">Example file input</label>
+            <input type="file" class="form-control-file" id="exampleFormControlFile">
+        </div>
+    </form>
+    <button type="submit" id="btn" class="btn btn-primary">Submit</button>
+    <script src="https://cdn.bootcss.com/jquery/2.1.0/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script>
+        $(function () {
+            $('#btn').click(function () {
+                let formData = new FormData()
+                let file = document.getElementById("exampleFormControlFile").files[0]
+                let email = $('#exampleInputEmail1').val()
+                let pass = $('#exampleInputPassword1').val()
+                formData.append('img', file)
+                formData.append('email', email)
+                formData.append('pass', pass)
+                axios({
+                    url: '/api/upload',
+                    method: 'POST',
+                    data: formData,
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then((res) => {
+                    console.log(res.data)
+                })
+            })
+        })
+    </script>
+</body>
+
+</html>
