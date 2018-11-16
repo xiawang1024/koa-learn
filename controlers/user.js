@@ -15,7 +15,11 @@ module.exports = {
     } else {
       newUser = new User(postData)
       let resData = await newUser.save()
-      ctx.body = resData
+      ctx.body = {
+        code: 0,
+        message: '注册成功！',
+        data: resData
+      }
     }
   },
   async login(ctx) {
